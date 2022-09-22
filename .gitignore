@@ -19,3 +19,8 @@
 
 !*.v
 !*.vwf
+
+
+*.sim.vwf
+*.msim.vwf
+
