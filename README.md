@@ -4,4 +4,6 @@
 - 作業二 [8 bits Carry-Lookahead Adder](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220922/2/CLA.v)
 - 作業三 [8 bits Count-1](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20220922/3)
 ## 2022/09/29  
-
+- 作業一 [ALU Function](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/1/ALU.v)
+- 作業二 [General Signed Multiplication](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/2/GSM.v)
+- 作業三 [shoot darts](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/3/hw.v)
