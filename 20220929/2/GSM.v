@@ -1,6 +1,4 @@
-module GSM(A,B,P,a1,b1,a2,b2,a3,b3,p1,p2,p3);
-input [3:0]A,B;
-output signed [7:0] P;
+module GSM(a1,b1,a2,b2,a3,b3,p1,p2,p3);
 input [7:0] a1,b1,b3;
 input [15:0] a2,b2,a3;
 output signed [15:0] p1;
@@ -26,7 +24,7 @@ input [b_size-1:0] b;
 output reg [a_size+b_size-1:0] p;
 reg [a_size+b_size+a_size-2:0] save[b_size-1:0];
 reg [a_size-1:0] Complement_a;
-reg [a_size+b_size+a_size:0]carry;
+reg [a_size+b_size+a_size+a_size:0]carry;
 reg check_one;
 integer x,y,z;
 always @(*)begin
@@ -43,12 +41,12 @@ always @(*)begin
 		for(x=0;x<a_size;x=x+1)begin
 			if(x==a_size-1) begin			//最高位元處理
 				if(Complement_a[a_size-1]==1 && b[y]==1)begin
-					for(z=x+0;z<x+b_size;z=z+1)begin
+					for(z=x+0;z<=x+b_size;z=z+1)begin
 						save[y][y+z]=1'b1;	//最高位元為1
 					end
 				end
 				else begin
-					for(z=x+0;z<x+b_size;z=z+1)begin
+					for(z=x+0;z<=x+b_size;z=z+1)begin
 						save[y][y+z]=1'b0;	//最高位元為0
 					end
 				end
@@ -76,7 +74,7 @@ always @(*)begin
 		end
 	end
 	for(y=0;y<b_size;y=y+1)begin
-		carry=carry+save[y][a_size+b_size-1:0];
+		carry=carry+save[y];
 	end
 	p=carry;
 	
