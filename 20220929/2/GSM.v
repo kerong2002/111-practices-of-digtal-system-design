@@ -7,7 +7,6 @@ output signed [15:0] p1;
 output signed [31:0] p2;
 output signed [23:0] p3;
 
-SIGNED_MULTI #(4,4) multiply_0(.a(A),.b(B),.p(P));
 
 SIGNED_MULTI #(8,8) multiply_1(.a(a1),.b(b1),.p(p1));
 								 
@@ -81,42 +80,6 @@ always @(*)begin
 	end
 	p=carry;
 	
-	//p=save[3][a_size+b_size-1:0]+save[2][a_size+b_size-1:0]+save[1][a_size+b_size-1:0]+save[0][a_size+b_size-1:0];
 end
 
 endmodule 
-
-/*
-module adder16bits(X,Y,sum);
-input [15:0] X,Y;
-output [15:0] sum;
-wire [15:0] Carry;
-
-FA f0(sum[0],Carry[0],X[0],Y[0],carry_in);
-genvar x;
-generate 
-	
-	for(x=1;x<=15;x=x+1)begin :adder_16
-		FA ff(sum[x],Carry[x],X[x],Y[x],Carry[x-1]);
-	end
-endgenerate
-
-
-endmodule
-
-module FA(s, Carry_out, x, y, Carry_in);
-input x, y, Carry_in;
-output s, Carry_out;
-wire c1,c2,s1;
-HA HA_1(.s(s1),.c(c1),.x(x),.y(y));
-HA HA_2(.s(s),.c(c2),.x(Carry_in),.y(s1));
-or or1(Carry_out,c1,c2);
-endmodule
-
-module HA(s, c, x, y);
-    input x, y;
-    output s, c;
-    xor xor1(s,x,y);
-    and ans1(c,x,y);
-endmodule 
-*/
