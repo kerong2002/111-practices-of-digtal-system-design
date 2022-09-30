@@ -6,7 +6,7 @@ output[7:0]     alu;
 reg[7:0]        alu;
 output Parity;
 reg Parity;
-reg [7:0] save,save1;
+reg [7:0] save;
 reg [2:0] set;
 integer x;
 always @(A or B)
@@ -24,9 +24,8 @@ begin
 		  end
 		  3'b111:begin
 				save=A*B;
-				save1=A*B;
 				set=B%8;
-				alu=(save<<set)+(save1>>(8-set));
+				alu=(save<<set)+(save>>(8-set));
 		  end
     endcase
 	 Parity=^alu;
