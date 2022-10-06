@@ -17,6 +17,6 @@ if (rst)
 neg_count <=0;
 else  if (neg_count ==10) neg_count <= 0;
 else neg_count<= neg_count +1;
- 
+
 assign clk_out = ((pos_count > 5) | (neg_count > 5));
 endmodule
