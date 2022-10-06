@@ -8,6 +8,6 @@
 - 作業二 [General Signed Multiplication](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/2/GSM.v)
 - 作業三 [Shoot darts](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/3/hw.v)
 ## 2022/10/06
-- 作業一
-- 作業二
+- 作業一 [mod11](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/1/mod11.v)
+- 作業二 [DIV](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/2/DIV.v)
 - 作業三
