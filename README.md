@@ -10,4 +10,4 @@
 ## 2022/10/06
 - 作業一 [mod11](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/1/mod11.v)
 - 作業二 [DIV](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/2/DIV.v)
-- 作業三
+- 作業三 [Sort](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/3/sort.v)
