@@ -8,10 +8,14 @@
 - 作業二 [General Signed Multiplication](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/2/GSM.v)
 - 作業三 [Shoot darts](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220929/3/hw.v)
 ## 2022/10/06
-- 作業一 [mod11](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/1/mod11.v)
+- 作業一 [Mod11](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/1/mod11.v)
 - 作業二 [DIV](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/2/DIV.v)
 - 作業三 [Sort](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221006/3/sort.v)
 ## 2022/10/13
 - 作業一 [Euclidean](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221013/1/hw.v)
 - 作業二 [Square](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221013/2/square.v)
 - 作業三 [LFST_Sort](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221013/3/LFSR_sort.v)
+## 2022/10/22
+- 作業一 [ALU + tb](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/1)
+- 作業二 [GCC + tb](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/2)
+- 作業三 [Stack](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/3)
