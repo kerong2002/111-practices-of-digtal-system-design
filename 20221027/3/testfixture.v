@@ -58,14 +58,17 @@ module testfixture;
             iny <= 32'd0;
             i   <=     0;
         end else begin
-            for ( i = 0; i < `datasize; i = i + 1) begin
+            for ( ; i < `datasize; i = i + 1) begin
                 { inx, iny, ans } <= { datxMem[i], datyMem[i], ansMem[i]};
 
                 #1;
-                if ((ans - `GAP) <= out && out <= (ans + `GAP))
+                if ((ans - `GAP) <= out && out <= (ans + `GAP)) begin
+                    $display("pass %d",i+1);
                     pass = pass + 1;
-                else
+                end else begin
+                    $display("err %d",i+1);
                     err  = err  + 1;
+                end
                 #1;
             end
         end
