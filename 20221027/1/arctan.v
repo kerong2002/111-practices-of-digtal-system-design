@@ -4,7 +4,8 @@ module arctan(inx,iny,out);
 input signed [31:0] inx,iny;
 output reg signed [31:0] out;
 
-reg signed [33:0] xn,yn;
+reg signed [39:0] xn,yn;
+reg signed [39:0] z;
 reg signed [6:0] pick;
 
 wire signed [39:0] atan[0:37];
@@ -50,8 +51,8 @@ assign atan[37]=40'b00000000_00000000000000000000000000000001;	//arctan(1/2^37)
 integer x;
 always @(*)begin
 	out  = 32'd0;
-	xn   = {inx[31],1'b0,inx[30:0]};
-	yn   = {iny[31],1'b0,iny[30:0]};
+	xn   = {inx[31],8'd0,inx[30:0]};
+	yn   = {iny[31],8'd0,iny[30:0]};
 	if(xn==0)begin
 		pick=0;
 	end
@@ -68,26 +69,18 @@ always @(*)begin
 		if(yn>=0)begin
 			xn = xn + yn * atan[pick];
 			yn = yn - xn * atan[pick];
-			out = out + atan[pick];
+			z  = z+ atan[pick];
 		end
 		else begin
 			xn = xn - yn * atan[pick];
 			yn = yn - xn * atan[pick];
-			out = out - atan[pick];
+			z  = z+ atan[pick];
 		end
-		if(xn==0)begin
-			pick=0;
-		end
-		else if(yn==0)begin
-			pick=0;
-		end
-		else begin
-			pick =  yn / xn;
-		end
-		if(pick<0)begin
-			pick = ~pick+1;
+		if(pick<37)begin
+			pick = pick + 1;
 		end
 	end
+	out = z[40:9];
 end
 
 endmodule
