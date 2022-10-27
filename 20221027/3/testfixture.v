@@ -57,6 +57,7 @@ module testfixture;
             inx <= 32'd0;
             iny <= 32'd0;
             i   <=     0;
+            ans <=     0;
         end else begin
             for ( ; i < `datasize; i = i + 1) begin
                 { inx, iny, ans } <= { datxMem[i], datyMem[i], ansMem[i]};
