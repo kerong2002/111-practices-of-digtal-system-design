@@ -75,8 +75,17 @@ always @(*)begin
 			yn = yn - xn * atan[pick];
 			out = out - atan[pick];
 		end
-		if(pick<37)begin
-			pick = pick + 1;
+		if(xn==0)begin
+			pick=0;
+		end
+		else if(yn==0)begin
+			pick=0;
+		end
+		else begin
+			pick =  yn / xn;
+		end
+		if(pick<0)begin
+			pick = ~pick+1;
 		end
 	end
 end
