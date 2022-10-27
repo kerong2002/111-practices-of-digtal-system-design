@@ -54,7 +54,7 @@ always @(*)begin
 	yn  = {2'b00,iny};
 	tan = {9'd0,1'b1,24'd0};
 	for(x=0;x<38;x=x+1)begin
-		if(iny>=0)begin
+		if(yn>=0)begin
 			xn = xn + yn * tan;
 			yn = yn - xn * tan;
 			out = out + atan[x];
@@ -64,7 +64,7 @@ always @(*)begin
 			yn = yn - xn * tan;
 			out = out - atan[x];
 		end
-		tan=tan >> 1;
+		tan = tan >> 1;
 	end
 end
 
