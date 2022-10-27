@@ -5,7 +5,7 @@ input signed [31:0] inx,iny;
 output reg signed [31:0] out;
 
 reg signed [33:0] xn,yn;
-reg [6:0] pick;
+reg signed [6:0] pick;
 
 wire signed [39:0] atan[0:37];
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
@@ -53,6 +53,9 @@ always @(*)begin
 	xn   = {inx[31],1'b0,inx[30:0]};
 	yn   = {iny[31],1'b0,iny[30:0]};
 	pick =  yn / xn;
+	if(pick<0)begin
+		pick = ~pick+1;
+	end
 	for(x = 0;x<40;x=x+1)begin
 		if(yn>=0)begin
 			xn = xn + yn * atan[pick];
