@@ -9,7 +9,6 @@
 */incremental_db
 */output_files
 */simulation
-*/*.do
 
 
 
@@ -20,6 +19,7 @@
 
 !*.v
 !*.vwf
+!*.do
 
 
 *.sim.vwf
