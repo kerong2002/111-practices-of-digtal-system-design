@@ -52,7 +52,15 @@ always @(*)begin
 	out  = 32'd0;
 	xn   = {inx[31],1'b0,inx[30:0]};
 	yn   = {iny[31],1'b0,iny[30:0]};
-	pick =  yn / xn;
+	if(xn==0)begin
+		pick=0;
+	end
+	else if(yn==0)begin
+		pick=0;
+	end
+	else begin
+		pick =  yn / xn;
+	end
 	if(pick<0)begin
 		pick = ~pick+1;
 	end
