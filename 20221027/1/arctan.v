@@ -5,7 +5,7 @@ input signed [31:0] inx,iny;
 output reg signed [31:0] out;
 
 reg signed [33:0] xn,yn;
-reg [33:0] tan;
+reg [6:0] pick;
 
 wire signed [39:0] atan[0:37];
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
@@ -49,22 +49,24 @@ assign atan[37]=40'b00000000_00000000000000000000000000000001;	//arctan(1/2^37)
 
 integer x;
 always @(*)begin
-	out = 32'd0;
-	xn  = {2'b00,inx};
-	yn  = {2'b00,iny};
-	tan = {9'd0,1'b1,24'd0};
-	for(x=0;x<38;x=x+1)begin
+	out  = 32'd0;
+	xn   = {inx[31],1'b0,inx[30:0]};
+	yn   = {iny[31],1'b0,iny[30:0]};
+	pick =  yn / xn;
+	for(x = 0;x<40;x=x+1)begin
 		if(yn>=0)begin
-			xn = xn + yn * tan;
-			yn = yn - xn * tan;
-			out = out + atan[x];
+			xn = xn + yn * atan[pick];
+			yn = yn - xn * atan[pick];
+			out = out + atan[pick];
 		end
 		else begin
-			xn = xn - yn * tan;
-			yn = yn - xn * tan;
-			out = out - atan[x];
+			xn = xn - yn * atan[pick];
+			yn = yn - xn * atan[pick];
+			out = out - atan[pick];
 		end
-		tan = tan >> 1;
+		if(pick<37)begin
+			pick = pick + 1;
+		end
 	end
 end
 
