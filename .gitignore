@@ -20,7 +20,9 @@
 !*.v
 !*.vwf
 !*.do
-
+!*.pdf
+!*.pptx
+!*.docx
 
 *.sim.vwf
 *.msim.vwf
