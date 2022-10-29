@@ -78,7 +78,7 @@ always @(*)begin
 		end
 		else begin
 			x_cpl = ~x_pos;
-			x_cpl = (x_cpl >> x) + 1;
+			x_cpl = x_cpl >> x;
 			set_x = ~x_cpl;
 		end
 		if(y_pos[39]==0)begin
@@ -86,7 +86,7 @@ always @(*)begin
 		end
 		else begin
 			y_cpl = ~y_pos;
-			y_cpl = (y_cpl >> x) + 1;
+			y_cpl = y_cpl >> x;
 			set_y = ~y_cpl;
 		end 
 		//=====<condition>==========
