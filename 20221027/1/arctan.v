@@ -8,7 +8,7 @@ reg signed [39:0] z;
 reg signed [39:0] x_pos,y_pos;
 reg signed [39:0] set_x,set_y;
 
-reg [39:0] x_cpl,y_cpl;
+reg signed [39:0] x_cpl,y_cpl;
 
 wire signed [39:0] atan[0:37];
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
@@ -57,6 +57,7 @@ always @(*)begin
 	x_pos = inx;
 	z = 40'd0;
 	out = 32'd0;
+	//==========<fill bits to 40>==========
 	if(inx[31]==0)begin
 		x_pos = {inx[31],8'd0,inx[30:0]};
 	end
@@ -69,27 +70,27 @@ always @(*)begin
 	else begin
 		y_pos = {iny[31],8'b1111_1111,iny[30:0]};
 	end
+	//==========<cordic>==================
 	for(x=0;x<38;x=x+1)begin
-		if(inx[31]==0)begin
+		//=====<tan data>==============
+		if(x_pos[39]==0)begin
 			set_x = x_pos >> x;
 		end
 		else begin
 			x_cpl = ~x_pos;
-			x_cpl = x_cpl>>x;
+			x_cpl = (x_cpl >> x) + 1;
 			set_x = ~x_cpl;
 		end
-		if(iny[31]==0)begin
+		if(y_pos[39]==0)begin
 			set_y = y_pos >> x;
 		end
 		else begin
 			y_cpl = ~y_pos;
-			y_cpl = y_cpl>>x;
+			y_cpl = (y_cpl >> x) + 1;
 			set_y = ~y_cpl;
-		end
-		if(y_pos==0)begin
-		
-		end
-		else if(y_pos>0)begin
+		end 
+		//=====<condition>==========
+		if(y_pos>=0)begin
 			x_pos = x_pos + set_y;
 			y_pos = y_pos - set_x;
 			z = z + atan[x];
@@ -100,6 +101,7 @@ always @(*)begin
 			z = z - atan[x];
 		end
 	end
+	//=========<out>==========
 	out = z[39:8];
 end
 
