@@ -1,10 +1,9 @@
-
 `timescale 1ns/10ps
 `define X_FILE "../2/x.dat"
 `define Y_FILE "../2/y.dat"
 `define THETA_FILE "../2/theta.dat"
-`define GAP 10
-`define datasize 18
+`define GAP (10 << 0)
+`define datasize 19
 module testfixture;
 
     reg  signed [31:0] inx, iny;
@@ -104,4 +103,5 @@ module testfixture;
     end
 
 endmodule
+
 
