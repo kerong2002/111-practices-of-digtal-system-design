@@ -2,16 +2,13 @@
 //arctan
 module arctan(inx,iny,out);
 input signed [31:0] inx,iny;
-output reg signed [31:0] out;
-reg signed [39:0] xn,yn;
-reg signed [39:0] z;
-reg signed [31:0] take;
-//reg signed [6:0] pick;
 
-reg signed [39:0] y_tan,x_tan;
+output reg signed [31:0] out;
+reg signed [39:0] z;
+reg signed [39:0] y_pos,x_pos;
+reg signed [39:0] set_x,set_y;
 
 wire signed [39:0] atan[0:37];
-
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
 assign atan[1]=40'b00011010_10010000101001110011000110100110;	//arctan(1/2^1)
 assign atan[2]=40'b00001110_00001001010001110100000001111101;	//arctan(1/2^2)
@@ -51,57 +48,53 @@ assign atan[35]=40'b00000000_00000000000000000000000000000111;	//arctan(1/2^35)
 assign atan[36]=40'b00000000_00000000000000000000000000000011;	//arctan(1/2^36)
 assign atan[37]=40'b00000000_00000000000000000000000000000001;	//arctan(1/2^37)
 
-integer x,y;
+integer x;
 always @(*)begin
 	out  = 32'd0;
-	z    = 40'd0;
-	take = 32'd0;
+	y_pos = iny;
+	x_pos = inx;
+	z = 40'd0;
+	out = 32'd0;
 	if(inx[31]==0)begin
-		xn   = {inx[31],8'd0,inx[30:0]};
+		x_pos = {inx[31],8'd0,inx[30:0]};
 	end
 	else begin
-		xn   = {inx[31],8'b1111_1111,inx[30:0]};
+		x_pos = {inx[31],8'b1111_1111,inx[30:0]};
 	end
 	if(iny[31]==0)begin
-		yn   = {iny[31],8'd0,iny[30:0]};
+		y_pos = {iny[31],8'd0,iny[30:0]};
 	end
 	else begin
-		yn   = {iny[31],8'b1111_1111,iny[30:0]};
+		y_pos = {iny[31],8'b1111_1111,iny[30:0]};
 	end
-	y_tan = {yn[39],yn[38:0]>>0};
-	x_tan = {xn[39],xn[38:0]>>0};
-	if(yn==0)begin
-	end
-	else if(~yn[39])begin
-		xn  = xn + y_tan;
-		yn  = yn - x_tan;
-		z  = z  + atan[0];
-	end
-	else begin
-		xn  = xn - y_tan;
-		yn  = yn + x_tan;
-		z  = z - atan[0];
-	end
-	for(x = 0 ; x < 38 ; x = x + 1)begin
-		y_tan = {yn[39],yn[38:0]>>x};
-		x_tan = {xn[39],xn[38:0]>>x};
-		if(yn==0)begin
-		end
-		else if(~yn[39])begin
-			xn  = xn + y_tan;
-			yn  = yn - x_tan;
-			z  = z  + atan[x];
+	for(x=0;x<38;x=x+1)begin
+		if(inx[31]==0)begin
+			set_x = x_pos >> x;
 		end
 		else begin
-			xn  = xn - y_tan;
-			yn  = yn + x_tan;
-			z  = z - atan[x];
+			set_x = {1'b1,(x_pos[38:0]>>x)};
+		end
+		if(iny[31]==0)begin
+			set_y = y_pos >> x;
+		end
+		else begin
+			set_y = {1'b1,(y_pos[38:0]>>x)};
+		end
+		if(y_pos==0)begin
+		
+		end
+		else if(y_pos>0)begin
+			x_pos = x_pos + set_y;
+			y_pos = y_pos - set_x;
+			z = z + atan[x];
+		end
+		else begin
+			x_pos = x_pos - set_y;
+			y_pos = y_pos + set_x;
+			z = z - atan[x];
 		end
 	end
-	take[31]=z[39];
-	z=z>>8;
-	take[30:0]=z[30:0];
-	out = take;
+	out = z[39:8];
 end
 
 endmodule
