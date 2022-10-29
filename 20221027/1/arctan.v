@@ -8,7 +8,7 @@ reg signed [39:0] z;
 reg signed [39:0] x_pos,y_pos;
 reg signed [39:0] set_x,set_y;
 
-reg [39:0] x_cpl y_cpl;
+reg [39:0] x_cpl,y_cpl;
 
 wire signed [39:0] atan[0:37];
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
