@@ -5,8 +5,10 @@ input signed [31:0] inx,iny;
 
 output reg signed [31:0] out;
 reg signed [39:0] z;
-reg signed [39:0] y_pos,x_pos;
+reg signed [39:0] x_pos,y_pos;
 reg signed [39:0] set_x,set_y;
+
+reg [39:0] x_cpl y_cpl;
 
 wire signed [39:0] atan[0:37];
 assign atan[0]=40'b00101101_00000000000000000000000000000000;	//arctan(1/2^0)
@@ -72,13 +74,17 @@ always @(*)begin
 			set_x = x_pos >> x;
 		end
 		else begin
-			set_x = {1'b1,(x_pos[38:0]>>x)};
+			x_cpl = ~x_pos;
+			x_cpl = x_cpl>>x;
+			set_x = ~x_cpl;
 		end
 		if(iny[31]==0)begin
 			set_y = y_pos >> x;
 		end
 		else begin
-			set_y = {1'b1,(y_pos[38:0]>>x)};
+			y_cpl = ~y_pos;
+			y_cpl = y_cpl>>x;
+			set_y = ~y_cpl;
 		end
 		if(y_pos==0)begin
 		
