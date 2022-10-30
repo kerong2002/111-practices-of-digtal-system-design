@@ -20,4 +20,4 @@
 - 作業二 [GCC + tb](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/2)
 - 作業三 [Stack](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/3)
 ## 2022/10/27
-- 加分題 [Cordic](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221027/Cordic)
+- 加分題 [Cordic Algorithm](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221027/Cordic)
