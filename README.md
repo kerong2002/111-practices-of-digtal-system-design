@@ -19,3 +19,5 @@
 - 作業一 [ALU + tb](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/1)
 - 作業二 [GCC + tb](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/2)
 - 作業三 [Stack](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/3)
+## 2022/10/27
+- [Cordic加分題](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221027/Cordic)
