@@ -4,7 +4,7 @@
 `define Y_FILE "../2/y.dat"
 `define THETA_FILE "../2/theta.dat"
 `define GAP 10
-`define datasize 19
+`define datasize 200
 module testfixture;
     reg  signed [31:0] inx, iny;
 
