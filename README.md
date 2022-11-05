@@ -21,3 +21,5 @@
 - 作業三 [Stack](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221020/3)
 ## 2022/10/27
 - 加分題 [Cordic Algorithm](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221027/Cordic)
+## 2022/11/03
+- 作業一 [pipeline](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221103/1/pipeline.v)
