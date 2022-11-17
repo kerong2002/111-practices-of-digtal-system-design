@@ -25,5 +25,5 @@
 - 作業一 [pipeline](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221103/1/pipeline.v)
 ## 2022/11/17 
 - 作業一 switch control LED
-- 作業二 switch control 7-Segment
-- 作業三 Calculate
+- 作業二 [switch control 7-Segment](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221117/2/hw.v)
+- 作業三 [Calculate](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221117/3/calculate.v)
