@@ -1,6 +1,6 @@
 //Will output logic HIGH when press the button.
-module d_btn(clk, rst, KEY1, pKEY);
-	input clk, rst, KEY1;
+module d_btn(clk, rst, KEY, pKEY);
+	input clk, rst, KEY;
 	output pKEY;
 	assign pKEY = _KEY;
 	reg _KEY;
@@ -12,9 +12,9 @@ module d_btn(clk, rst, KEY1, pKEY);
 		end else begin
 			if (count>=1000)begin
 				count<=0;
-				_KEY<=KEY1;
+				_KEY<=KEY;
 			end
-			else if(_KEY^KEY1) count<=count+1;
+			else if(_KEY^KEY) count<=count+1;
 			else count<=0;
 		end
 	end
