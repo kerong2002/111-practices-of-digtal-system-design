@@ -1,4 +1,4 @@
-//will output logic "HIGH" when press the button.
+//will output logic "LOW" when press the button.
 module d_btn(clk, rst, KEY, pKEY);
 	input clk, rst, KEY;
 	output pKEY;
