@@ -18,6 +18,12 @@ module guess(clk, rst, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, 
 	
 	output reg [1:0] state;
 	reg [1:0] nextstate;
+	wire [6:0] switch0;
+	wire [6:0] switch1;
+	wire [6:0] switch2;
+	wire [6:0] switch3;
+	wire [6:0] switch5;
+	wire [6:0] switch7;
 	parameter [1:0] SET   = 2'd0;
 	parameter [1:0] WAIT  = 2'd1;
 	parameter [1:0] GUESS = 2'd2;
@@ -31,10 +37,11 @@ module guess(clk, rst, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, 
 	output reg [3:0] B_cnt;
 	assign pass_guess = (A_cnt == 4'd4);
 	wire clk18;
-	//assign clk18 = clk;
+	assign clk18 = clk;
+	/*
 	counterDivider #(22, 50000000/18) cntD(clk, rst, clk18);
 	KEY_Debounce d2(clk18, rst, KEY[3], KEY_3);
-   
+   */
 	
 	
 //	//========<測試>========
@@ -50,6 +57,7 @@ module guess(clk, rst, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, 
 			state <= nextstate;
 		end
 	end
+	
 	integer x;
 	always @(*)begin
 		case(state)
@@ -196,6 +204,14 @@ module guess(clk, rst, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, 
 			end
 		end
 	end
+	
+	switch sw3(SW[15:12] , switch3);
+	switch sw2(SW[11:8]  , switch2);
+	switch sw1(SW[7:4]   , switch1);
+	switch sw0(SW[3:0]   , switch0);
+	switch sw7(A_cnt[3:0], switch7);
+	switch sw5(B_cnt[3:0], switch5);
+	
 	always @(posedge clk18, negedge rst)begin
 		if(!rst)begin
 			{HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b111_1111;
@@ -214,201 +230,31 @@ module guess(clk, rst, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, 
 					{HEX6[0],HEX6[1],HEX6[2],HEX6[3],HEX6[4],HEX6[5],HEX6[6]} <= 7'b111_1111;
 					{HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b111_1111;
 					{HEX4[0],HEX4[1],HEX4[2],HEX4[3],HEX4[4],HEX4[5],HEX4[6]} <= 7'b111_1111;
-					case(SW[15:12])
-						4'h0 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000001;
-						4'h1 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1001111;
-						4'h2 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0010010;
-						4'h3 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000110;
-						4'h4 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1001100;
-						4'h5 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0100100;
-						4'h6 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1100000;
-						4'h7 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001111;
-						4'h8 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000000;
-						4'h9 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001100;
-						4'ha : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001000;
-						4'hb : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1100000;
-						4'hc : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0110001;
-						4'hd : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1000010;
-						4'he : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0110000;
-						4'hf : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0111000;
-					endcase
-					case(SW[11:8])
-						4'h0 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000001;
-						4'h1 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1001111;
-						4'h2 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0010010;
-						4'h3 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000110;
-						4'h4 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1001100;
-						4'h5 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0100100;
-						4'h6 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1100000;
-						4'h7 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001111;
-						4'h8 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000000;
-						4'h9 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001100;
-						4'ha : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001000;
-						4'hb : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1100000;
-						4'hc : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0110001;
-						4'hd : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1000010;
-						4'he : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0110000;
-						4'hf : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0111000;
-					endcase
-					case(SW[7:4])
-						4'h0 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000001;
-						4'h1 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1001111;
-						4'h2 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0010010;
-						4'h3 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000110;
-						4'h4 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1001100;
-						4'h5 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0100100;
-						4'h6 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1100000;
-						4'h7 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001111;
-						4'h8 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000000;
-						4'h9 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001100;
-						4'ha : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001000;
-						4'hb : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1100000;
-						4'hc : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0110001;
-						4'hd : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1000010;
-						4'he : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0110000;
-						4'hf : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0111000;
-					endcase
-					case(SW[3:0])
-						4'h0 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000001;
-						4'h1 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1001111;
-						4'h2 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0010010;
-						4'h3 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000110;
-						4'h4 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1001100;
-						4'h5 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0100100;
-						4'h6 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1100000;
-						4'h7 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001111;
-						4'h8 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000000;
-						4'h9 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001100;
-						4'ha : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001000;
-						4'hb : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1100000;
-						4'hc : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0110001;
-						4'hd : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1000010;
-						4'he : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0110000;
-						4'hf : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0111000;
-					endcase
+					{HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= switch3;
+					{HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= switch2;
+					{HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= switch1;
+					{HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= switch0;
 				end
 				WAIT:begin
 					{HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b111_1111;
 					{HEX6[0],HEX6[1],HEX6[2],HEX6[3],HEX6[4],HEX6[5],HEX6[6]} <= 7'b111_1111;
 					{HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b111_1111;
 					{HEX4[0],HEX4[1],HEX4[2],HEX4[3],HEX4[4],HEX4[5],HEX4[6]} <= 7'b111_1111;
-					{HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= seg7_run_cycle ;
-					{HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= seg7_run_cycle ;
-					{HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= seg7_run_cycle ;
-					{HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= seg7_run_cycle ;
+					{HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= seg7_run_cycle;
+					{HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= seg7_run_cycle;
+					{HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= seg7_run_cycle;
+					{HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= seg7_run_cycle;
 				end
 				GUESS:begin
-					case(SW[15:12])
-						4'h0 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000001;
-						4'h1 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1001111;
-						4'h2 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0010010;
-						4'h3 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000110;
-						4'h4 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1001100;
-						4'h5 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0100100;
-						4'h6 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1100000;
-						4'h7 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001111;
-						4'h8 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0000000;
-						4'h9 : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001100;
-						4'ha : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0001000;
-						4'hb : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1100000;
-						4'hc : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0110001;
-						4'hd : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b1000010;
-						4'he : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0110000;
-						4'hf : {HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= 7'b0111000;
-					endcase
-					case(SW[11:8])
-						4'h0 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000001;
-						4'h1 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1001111;
-						4'h2 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0010010;
-						4'h3 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000110;
-						4'h4 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1001100;
-						4'h5 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0100100;
-						4'h6 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1100000;
-						4'h7 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001111;
-						4'h8 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0000000;
-						4'h9 : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001100;
-						4'ha : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0001000;
-						4'hb : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1100000;
-						4'hc : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0110001;
-						4'hd : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b1000010;
-						4'he : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0110000;
-						4'hf : {HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= 7'b0111000;
-					endcase
-					case(SW[7:4])
-						4'h0 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000001;
-						4'h1 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1001111;
-						4'h2 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0010010;
-						4'h3 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000110;
-						4'h4 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1001100;
-						4'h5 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0100100;
-						4'h6 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1100000;
-						4'h7 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001111;
-						4'h8 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0000000;
-						4'h9 : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001100;
-						4'ha : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0001000;
-						4'hb : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1100000;
-						4'hc : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0110001;
-						4'hd : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b1000010;
-						4'he : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0110000;
-						4'hf : {HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= 7'b0111000;
-					endcase
-					case(SW[3:0])
-						4'h0 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000001;
-						4'h1 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1001111;
-						4'h2 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0010010;
-						4'h3 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000110;
-						4'h4 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1001100;
-						4'h5 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0100100;
-						4'h6 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1100000;
-						4'h7 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001111;
-						4'h8 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0000000;
-						4'h9 : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001100;
-						4'ha : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0001000;
-						4'hb : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1100000;
-						4'hc : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0110001;
-						4'hd : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b1000010;
-						4'he : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0110000;
-						4'hf : {HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= 7'b0111000;
-					endcase
+					{HEX3[0],HEX3[1],HEX3[2],HEX3[3],HEX3[4],HEX3[5],HEX3[6]} <= switch3;
+					{HEX2[0],HEX2[1],HEX2[2],HEX2[3],HEX2[4],HEX2[5],HEX2[6]} <= switch2;
+					{HEX1[0],HEX1[1],HEX1[2],HEX1[3],HEX1[4],HEX1[5],HEX1[6]} <= switch1;
+					{HEX0[0],HEX0[1],HEX0[2],HEX0[3],HEX0[4],HEX0[5],HEX0[6]} <= switch0;
 					if(KEY[3])begin
 						if(`g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0)begin
-							case(A_cnt[3:0])
-								4'h0 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0000001;
-								4'h1 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b1001111;
-								4'h2 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0010010;
-								4'h3 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0000110;
-								4'h4 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b1001100;
-								4'h5 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0100100;
-								4'h6 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b1100000;
-								4'h7 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0001111;
-								4'h8 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0000000;
-								4'h9 : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0001100;
-								4'ha : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0001000;
-								4'hb : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b1100000;
-								4'hc : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0110001;
-								4'hd : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b1000010;
-								4'he : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0110000;
-								4'hf : {HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= 7'b0111000;
-							endcase
+							{HEX7[0],HEX7[1],HEX7[2],HEX7[3],HEX7[4],HEX7[5],HEX7[6]} <= switch7;
 							{HEX6[0],HEX6[1],HEX6[2],HEX6[3],HEX6[4],HEX6[5],HEX6[6]} <= 7'b0001000;
-							case(B_cnt[3:0])
-								4'h0 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0000001;
-								4'h1 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b1001111;
-								4'h2 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0010010;
-								4'h3 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0000110;
-								4'h4 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b1001100;
-								4'h5 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0100100;
-								4'h6 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b1100000;
-								4'h7 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0001111;
-								4'h8 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0000000;
-								4'h9 : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0001100;
-								4'ha : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0001000;
-								4'hb : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b1100000;
-								4'hc : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0110001;
-								4'hd : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b1000010;
-								4'he : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0110000;
-								4'hf : {HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= 7'b0111000;
-							endcase
+							{HEX5[0],HEX5[1],HEX5[2],HEX5[3],HEX5[4],HEX5[5],HEX5[6]} <= switch5;
 							{HEX4[0],HEX4[1],HEX4[2],HEX4[3],HEX4[4],HEX4[5],HEX4[6]} <= 7'b1100000;
 						end
 						else begin
@@ -541,6 +387,32 @@ module counterDivider(CLK, RST, CLK_Out);
 		else begin
 			Cnt <= Cnt + 1'b1;
 		end
+	end
+	
+endmodule
+
+module switch(in_4,out_LED_7);
+	input [3:0] in_4;
+	output reg [6:0] out_LED_7;
+	always @(*)begin
+		case(in_4)
+			4'h0 : out_LED_7 = 7'b0000001;
+			4'h1 : out_LED_7 = 7'b1001111;
+			4'h2 : out_LED_7 = 7'b0010010;
+			4'h3 : out_LED_7 = 7'b0000110;
+			4'h4 : out_LED_7 = 7'b1001100;
+			4'h5 : out_LED_7 = 7'b0100100;
+			4'h6 : out_LED_7 = 7'b1100000;
+			4'h7 : out_LED_7 = 7'b0001111;
+			4'h8 : out_LED_7 = 7'b0000000;
+			4'h9 : out_LED_7 = 7'b0001100;
+			4'ha : out_LED_7 = 7'b0001000;
+			4'hb : out_LED_7 = 7'b1100000;
+			4'hc : out_LED_7 = 7'b0110001;
+			4'hd : out_LED_7 = 7'b1000010;
+			4'he : out_LED_7 = 7'b0110000;
+			4'hf : out_LED_7 = 7'b0111000;
+		endcase
 	end
 	
 endmodule 
