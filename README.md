@@ -28,7 +28,7 @@
 - 作業二 [switch control 7-Segment](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221117/2/hw.v)
 - 作業三 [Calculate](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221117/3/calculate.v)
 ## 2022/11/24
-- 作業一 [frequency divider]
+- 作業一 [frequency divider](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/1/HW1.v)
 - 作業二 [time]
-- 作業三 [1A2B]
+- 作業三 [1A2B](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/3/guess.v)
  
