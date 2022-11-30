@@ -24,7 +24,7 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 	parameter [1:0] GUESS = 2'd2;
 	parameter [1:0] END 	 = 2'd3;
 	
-	wire pass_guess;
+	reg  pass_guess;
 	reg [17:0] guess_cnt;
 	reg [6:0] seg7_run_cycle;
 	reg [3:0] A_cnt;
@@ -35,18 +35,16 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 	wire KEY_take;
 	wire rst;
 	assign rst =  KEY[0];
-	counterDivider #(22, 50000000/18) cntD(clk, rst, clk18);
+	counterDivider #(50, 50000000/18) cntD(clk, rst, clk18);
 	KEY_Debounce d2(clk18, rst, KEY[3], KEY_take);
-	/*
-	assign KEY_3 = KEY[3];
-	assign clk18 = clk;
-	*/
+	
+	//assign KEY_3 = KEY[3];
+	//assign clk18 = clk;
+	
 	assign LEDR = guess_cnt;
-	assign pass_guess = (A_cnt == 4'd4);
 	assign KEY_3   = ~KEY_take;
 	assign LEDG[0] = ~KEY[0];
 	assign LEDG[3] = KEY_3;
-	
 //========<狀態轉移>===========
 	always @(posedge clk18, negedge rst)begin
 		if(!rst)begin
@@ -64,6 +62,7 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 			SET:begin
 				A_cnt = 4'd0;
 				B_cnt = 4'd0;
+				pass_guess = 1'd0;
 				if(KEY_3 &&(`g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0))begin
 					`A3 = `g3;
 					`A2 = `g2;
@@ -72,20 +71,13 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 					nextstate = WAIT;
 				end
 				else begin
-					`A3 = 4'd0;
-					`A2 = 4'd0;
-					`A1 = 4'd0;
-					`A0 = 4'd0;
 					nextstate = SET;
 				end
 			end
 			WAIT:begin
-				`A3 = `A3;
-				`A2 = `A2;
-				`A1 = `A1;
-				`A0 = `A0;
 				A_cnt = 4'd0;
 				B_cnt = 4'd0;
+				pass_guess = 1'd0;
 				if(KEY_3)begin
 					nextstate = (|SW[15:0]) ? WAIT : GUESS;
 				end
@@ -94,16 +86,40 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 				end
 			end
 			GUESS:begin
-				`A3 = `A3;
-				`A2 = `A2;
-				`A1 = `A1;
-				`A0 = `A0;
 				A_cnt = A_cnt;
 				B_cnt = B_cnt;
+				pass_guess = 1'd0;
 				if(guess_cnt <= 18'b01_1111_1111_1111_1111)begin
-					if(KEY_3 && (`g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0))begin
-						A_cnt = (`A3 == `g3) + (`A2 == `g2) + (`A1 == `g1) + (`A0 == `g0);	
-						B_cnt = (`g3 == `A2 || `g3 == `A1 || `g3 ==`A0) + (`g2 == `A3 || `g2 == `A1 || `g2 ==`A0) + (`g1 == `A3 || `g1 == `A2 || `g1 ==`A0) + (`g0 == `A3 || `g0 == `A2 || `g0 ==`A1); 
+					if(KEY_3 &&(`g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0))begin
+						A_cnt = 4'd0;
+						B_cnt = 4'd0;
+						if(`A3 == `g3)begin
+							A_cnt = A_cnt + 4'd1;
+						end
+						if(`A2 == `g2)begin
+							A_cnt = A_cnt + 4'd1;
+						end
+						if(`A1 == `g1)begin
+							A_cnt = A_cnt + 4'd1;
+						end
+						if(`A0 == `g0)begin
+							A_cnt = A_cnt + 4'd1;
+						end
+						if(`g3 == `A2 || `g3 == `A1 || `g3 ==`A0)begin
+							B_cnt = B_cnt + 4'd1;
+						end
+						if(`g2 == `A3 || `g2 == `A1 || `g2 ==`A0)begin
+							B_cnt = B_cnt + 4'd1;
+						end
+						if(`g1 == `A3 || `g1 == `A2 || `g1 ==`A0)begin
+							B_cnt = B_cnt + 4'd1;
+						end
+						if(`g0 == `A3 || `g0 == `A2 || `g0 ==`A1)begin
+							B_cnt = B_cnt + 4'd1;
+						end
+						//A_cnt = (`A3 == `g3) + (`A2 == `g2) + (`A1 == `g1) + (`A0 == `g0);	
+						//B_cnt = () +  +  + ; 
+						pass_guess = (A_cnt == 4'd4) ? 1'd1 : 1'd0;
 						nextstate = (A_cnt == 4'd4) ? END : GUESS;
 					end
 					else begin
@@ -115,15 +131,13 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 				end
 			end
 			END:begin
-				`A3 = 4'd0;
-				`A2 = 4'd0;
-				`A1 = 4'd0;
-				`A0 = 4'd0;
+				pass_guess = pass_guess;
 				A_cnt = A_cnt;
 				B_cnt = B_cnt;
 				nextstate = (KEY_3 &&(|SW[15:0])==0) ? SET : END;
 			end
 			default:begin
+				pass_guess = 1'd0;
 				A_cnt = 4'd0;
 				B_cnt = 4'd0;
 				`A3 = 4'd0;
@@ -143,7 +157,7 @@ module guess(clk, SW, HEX7, HEX6, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, KEY, LEDR,
 		else begin
 			if(state == GUESS)begin
 				if(guess_cnt <= 18'b01_1111_1111_1111_1111)begin
-					if(`g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0)begin
+					if(KEY_3 && `g3 !=`g2 && `g3 != `g1 && `g3 != `g0 && `g2 !=`g1 && `g2 != `g0 && `g1 != `g0)begin
 						guess_cnt <= {guess_cnt[16:0],{1'b1}};
 					end
 					else begin
