@@ -34,5 +34,5 @@
  ## 2022/12/01
 - 作業一 [IR Control](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/1/HW.v)
 - 作業二 [LCD Control]
-- 作業三 [DanceDanceRevolution]
+- 作業三 [DanceDanceRevolution](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/3/dancing_machine.v)
  
