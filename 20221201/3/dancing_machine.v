@@ -403,7 +403,7 @@ module LCD_display_string(index, out, DATA_IN, clk, rst,oDATA,oDATA_READY);
 	//7F left
 	//7E right
 	wire clk18;
-	counterDivider #(1100, 50000000) cntD(clk, rst, clk18);
+	counterDivider #(19, 50000000) cntD(clk, rst, clk18);
 	reg state, next_state;
 	parameter PLAY = 1'd0;
 	parameter DONE = 1'd1;
@@ -512,8 +512,8 @@ module LCD_display_string(index, out, DATA_IN, clk, rst,oDATA,oDATA_READY);
 		displayreg[11] 	<= ans_num; //num
 		displayreg[12] 	<= 8'h20; //
 		displayreg[13] 	<= 8'h20; //
-		displayreg[14] 	<= 8'h20; //
-		displayreg[15] 	<= 8'h20; //
+		displayreg[14] 	<= 8'h01; //
+		displayreg[15] 	<= 8'h02; //
 		`displayregLine2  <= game_data;
 		// Line 2
 		/*
@@ -586,21 +586,21 @@ module Custom_font_ROM(addr, out_data);//8個自定義字形
 	assign data[07] = 8'b000_00000;//游標位置
 	//1
 	assign data[08] = 8'b000_00000;//
-	assign data[09] = 8'b000_00000;
-	assign data[10] = 8'b000_00000;
-	assign data[11] = 8'b000_00000;
-	assign data[12] = 8'b000_00000;
-	assign data[13] = 8'b000_00000;
-	assign data[14] = 8'b000_00000;
+	assign data[09] = 8'b000_00100;
+	assign data[10] = 8'b000_01110;
+	assign data[11] = 8'b000_10101;
+	assign data[12] = 8'b000_00100;
+	assign data[13] = 8'b000_00100;
+	assign data[14] = 8'b000_00100;
 	assign data[15] = 8'b000_00000;//游標位置
 	//2
 	assign data[16] = 8'b000_00000;//
-	assign data[17] = 8'b000_00000;
-	assign data[18] = 8'b000_00000;
-	assign data[19] = 8'b000_00000;
-	assign data[20] = 8'b000_00000;
-	assign data[21] = 8'b000_00000;
-	assign data[22] = 8'b000_00000;
+	assign data[17] = 8'b000_00100;
+	assign data[18] = 8'b000_00100;
+	assign data[19] = 8'b000_00100;
+	assign data[20] = 8'b000_10101;
+	assign data[21] = 8'b000_01110;
+	assign data[22] = 8'b000_00100;
 	assign data[23] = 8'b000_00000;//游標位置
 	//3
 	assign data[24] = 8'b000_00000;//
