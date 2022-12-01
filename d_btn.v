@@ -8,11 +8,11 @@ module d_btn(clk, rst, KEY, pKEY);
 	always@(posedge clk, negedge rst)begin
 		if (!rst)begin
 			count <= 0;
-			_KEY <= 1;
+			_KEY <= 0;
 		end else begin
 			if (count>=1000)begin
 				count<=0;
-				_KEY<=KEY;
+				_KEY<=~KEY;
 			end
 			else if(_KEY^KEY) count<=count+1;
 			else count<=0;
