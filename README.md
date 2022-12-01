@@ -31,4 +31,8 @@
 - 作業一 [frequency divider](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/1/HW1.v)
 - 作業二 [time]
 - 作業三 [1A2B](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/3/guess.v)
+ ## 2022/12/01
+- 作業一 [IR_Control](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/1/HW.v)
+- 作業二 [LCD_Control]
+- 作業三 [DanceDanceRevolution]
  
