@@ -142,7 +142,7 @@ module hw (
             LEDR <= LEDR >> 1;
     end
 
-    always @(posedge clk_5, posedge rst) begin
+    always @(posedge clk18, posedge rst) begin
         if (rst)
             ss <= 0;
         else if (ss == 60)
