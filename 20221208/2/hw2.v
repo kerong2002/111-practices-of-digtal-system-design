@@ -21,7 +21,6 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 	wire [7:0]IR_keycode;
 	integer i;
 	assign SRAM_DQ = mod ? 16'bz : Data_in;
-	assign DQ = SRAM_DQ;
 	assign LEDG[8] = mod;
 	assign IR_keycode = IR_DATA[23:16];
 	assign SRAM_ADDR = {LED_addr[1], LED_addr[0]};
@@ -74,7 +73,7 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 				end
 				4'd2:begin
 					LEDR[15:0] <= SRAM_DQ;
-					state <= 4'd0;
+					state <= 4'd3;
 				end
 				4'd3:begin
 					SRAM_CE_N <= 1;
@@ -82,7 +81,7 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 				end
 				4'd4:begin
 					Data_in <= {LED_shift[3], LED_shift[2], LED_shift[1], LED_shift[0]};
-					state <= 4'd4;
+					state <= 4'd5;
 				end
 				4'd5:begin
 					SRAM_CE_N <= 0;
