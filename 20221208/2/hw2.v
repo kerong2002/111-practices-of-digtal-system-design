@@ -1,7 +1,7 @@
 module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, SRAM_ADDR, SRAM_DQ, SRAM_LB_N, SRAM_WE_N, SRAM_OE_N, SRAM_UB_N, SRAM_CE_N);
 	input Clk, rst_n, IRDA_RXD;
 	output [19:0] SRAM_ADDR;
-	inout reg [15:0] SRAM_DQ;
+	inout wire [15:0] SRAM_DQ;
 	output SRAM_LB_N = 0;
 	output SRAM_UB_N = 0;
 	output reg SRAM_CE_N;
@@ -14,11 +14,13 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 	wire [31:0] IR_DATA;
 	reg [3:0] LED_shift [3:0];
 	reg [3:0] LED_addr [1:0];
+	reg [15:0] Data_in;
 	reg READY;
 	reg mod = 0;
 	wire [15:0] DQ;
 	wire [7:0]IR_keycode;
 	integer i;
+	assign SRAM_DQ = mod ? 16'bz : Data_in;
 	assign DQ = SRAM_DQ;
 	assign LEDG[8] = mod;
 	assign IR_keycode = IR_DATA[23:16];
@@ -48,6 +50,7 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 		end else begin
 			case(state)
 				4'd0:begin
+					SRAM_CE_N <= 1;
 					if (READY == 1 && IR_READY == 0)begin
 						case(IR_keycode)
 							8'h00, 8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07, 8'h08, 8'h09:begin
@@ -61,7 +64,7 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 							8'h13:{LED_addr[1], LED_addr[0]} <= 8'd0;
 							8'h10:{LED_shift[3], LED_shift[2], LED_shift[1], LED_shift[0]} <= 16'd0;
 							8'h11:mod <= ~mod;
-							8'h17:state <= mod ? 4'd1 : 4'd3;
+							8'h17:state <= mod ? 4'd1 : 4'd4;
 						endcase
 					end
 				end
@@ -70,16 +73,25 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 					state <= 4'd2;
 				end
 				4'd2:begin
-					LEDR <= {2'b0, DQ};
-					SRAM_CE_N <= 1;
+					LEDR[15:0] <= SRAM_DQ;
 					state <= 4'd0;
 				end
 				4'd3:begin
-					SRAM_CE_N <= 0;
-					SRAM_DQ <= {LED_shift[3], LED_shift[2], LED_shift[1], LED_shift[0]};
-					state <= 4'd4;
+					SRAM_CE_N <= 1;
+					state <= 4'd0;
 				end
 				4'd4:begin
+					Data_in <= {LED_shift[3], LED_shift[2], LED_shift[1], LED_shift[0]};
+					state <= 4'd4;
+				end
+				4'd5:begin
+					SRAM_CE_N <= 0;
+					state <= 4'd6;
+				end
+				4'd6:begin
+					state <= 4'd7;
+				end
+				4'd7:begin
 					SRAM_CE_N <= 1;
 					state <= 4'd0;
 				end
