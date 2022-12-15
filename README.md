@@ -35,4 +35,8 @@
 - 作業一 [IR Control](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/1/HW.v)
 - 作業二 [LCD Control](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/2/hw.v)
 - 作業三 [DanceDanceRevolution](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/3/dancing_machine.v)
+## 2022/12/08
+- 作業一 [memory](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221208/1/memory.v)
+- 作業二 [hw2](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221208/2/hw2.v)
+- 作業三
  
