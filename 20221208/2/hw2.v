@@ -1,4 +1,4 @@
-module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, SRAM_ADDR, SRAM_DQ, SRAM_LB_N, SRAM_WE_N, SRAM_OE_N, SRAM_UB_N, SRAM_CE_N);
+module HW2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0, SRAM_ADDR, SRAM_DQ, SRAM_LB_N, SRAM_WE_N, SRAM_OE_N, SRAM_UB_N, SRAM_CE_N);
 	input Clk, rst_n, IRDA_RXD;
 	output [19:0] SRAM_ADDR;
 	inout wire [15:0] SRAM_DQ;
@@ -40,10 +40,10 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 	always@(negedge Clk, negedge rst_n)begin
 		if(!rst_n)begin
 			for(i=0; i<=3; i=i+1)begin
-				LED_shift[i] = 8'd0;
+				LED_shift[i] = 4'd0;
 			end
-			LED_addr[0] <= 8'd0;
-			LED_addr[1] <= 8'd0;
+			LED_addr[0] <= 4'd0;
+			LED_addr[1] <= 4'd0;
 			LEDR <= 18'd0;
 			mod <= 0;
 		end else begin
@@ -56,7 +56,7 @@ module hw2(Clk, rst_n, IRDA_RXD, LEDR, LEDG, HEX5, HEX4, HEX3, HEX2, HEX1, HEX0,
 								for(i=1; i<=3; i=i+1)begin
 									LED_shift[i] <= LED_shift[i-1];
 								end
-								LED_shift[0] <= IR_keycode;
+								LED_shift[0] <= IR_keycode[3:0];
 								//LEDR <= {10'd0, IR_keycode};
 							end
 							8'h0F:{LED_addr[1], LED_addr[0]} <= {LED_shift[1], LED_shift[0]};
