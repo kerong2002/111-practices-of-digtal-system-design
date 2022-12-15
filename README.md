@@ -29,7 +29,7 @@
 - 作業三 [Calculate](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221117/3/calculate.v)
 ## 2022/11/24
 - 作業一 [frequency divider](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/1/HW1.v)
-- 作業二 [time]
+- 作業二 [time](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221124/2)
 - 作業三 [1A2B](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221124/3/guess.v)
  ## 2022/12/01
 - 作業一 [IR Control](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221201/1/HW.v)
