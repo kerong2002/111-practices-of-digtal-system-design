@@ -1,19 +1,55 @@
-module LCD(Clk, rst, LCD_DATA, LCD_EN, LCD_RW, LCD_RS, DATA_IN);
+
+`define displayregLine2 {LCD_L[9],LCD_L[8],LCD_L[7],LCD_L[6],LCD_L[5],LCD_L[4],LCD_L[3],LCD_L[2],LCD_L[1],LCD_L[0],displayreg[16],displayreg[17],displayreg[18],displayreg[19],displayreg[20],displayreg[21],displayreg[22],displayreg[23],displayreg[24],displayreg[25],displayreg[26],displayreg[27],displayreg[28],displayreg[29],displayreg[30],displayreg[31],LCD_R[9],LCD_R[8],LCD_R[7],LCD_R[6],LCD_R[5],LCD_R[4],LCD_R[3],LCD_R[2],LCD_R[1],LCD_R[0],LCD_B[15],LCD_B[14],LCD_B[13],LCD_B[12],LCD_B[11],LCD_B[10],LCD_B[9],LCD_B[8],LCD_B[7],LCD_B[6],LCD_B[5],LCD_B[4],LCD_B[3],LCD_B[2],LCD_B[1],LCD_B[0]}
+
+`define lcdLine1 {displayreg[0],displayreg[1],displayreg[2],displayreg[3],displayreg[4],displayreg[5],displayreg[6],displayreg[7],displayreg[8],displayreg[9],displayreg[10],displayreg[11],displayreg[12],displayreg[13],displayreg[14],displayreg[15]}
+
+`define lcdLine2 {displayreg[16],displayreg[17],displayreg[18],displayreg[19],displayreg[20],displayreg[21],displayreg[22],displayreg[23],displayreg[24],displayreg[25],displayreg[26],displayreg[27],displayreg[28],displayreg[29],displayreg[30],displayreg[31]}
+
+module c_lcd(Clk, rst, gameState, timeNum, point, SW, LCD_DATA, LCD_EN, LCD_RW, LCD_RS, DATA_IN, LEDR, LEDG);
     input           Clk, rst;
     input   [3:0]   DATA_IN;
     inout   [7:0]   LCD_DATA;
     output          LCD_EN, LCD_RW, LCD_RS;
+    input [1:0] SW;
+    output reg [17:0] LEDR;
+    output wire [8:0] LEDG;
+    input [1:0] gameState;
+    wire  [127:0] gameStr[2:0];
+    input [6:0] timeNum;
+    input [6:0] point;
+
+    parameter start = 2'd0;
+    parameter gaming = 2'd1;
+    parameter gameOver = 2'd2;
+
+    assign gameStr[start]    = { {5{8'h20}}, 40'h53_54_41_52_54,    {6{8'h20}} };
+    assign gameStr[gaming]   = { {5{8'h20}}, 48'h47_41_4D_49_4E_47, {5{8'h20}} };
+    assign gameStr[gameOver] = { {3{8'h20}}, 32'h47_41_4D_45, 8'h20, 32'h_4F_56_45_52 , {4{8'h20}} };
 
     reg     [3:0]   state, next_command;
     // Enter new ASCII hex data above for LCD Display
     reg     [7:0]   DATA_BUS_VALUE;
-    wire    [7:0]   Next_Char;
+    reg     [7:0]   Next_Char;
     reg     [19:0]  CLK_COUNT_400HZ;
     reg     [4:0]   CHAR_COUNT;
     reg             CLK_400HZ, LCD_RW, LCD_EN, LCD_RS;
+    wire    [79:0]   STD_ID[2:0];
+    assign STD_ID[0] = {8'h43, 8'h31, 8'h31, 8'h30, 8'h31, 8'h35, 8'h32, 8'h33, 8'h35, 8'h31};
+    assign STD_ID[1] = {8'h43, 8'h31, 8'h31, 8'h30, 8'h31, 8'h35, 8'h32, 8'h33, 8'h33, 8'h38};
+    assign STD_ID[2] = {8'h43, 8'h31, 8'h31, 8'h30, 8'h31, 8'h35, 8'h32, 8'h33, 8'h35, 8'h33};
+    //wire    [239:0]   STD_LCD_ID[2:0];
+    //assign STD_LCD_ID = {10{8'h20}};
 
     reg     [5:0]   font_addr;
     wire    [7:0]   font_data;
+
+    wire clk72;
+    counterDivider #(50, 50000000/4) D21(Clk, ~rst, clk72);
+    always @(*) begin
+        LEDR[15] = clk72;
+        LEDR[14] = Clk;
+        LEDR[13] = CLK_400HZ;
+    end
 
     parameter
     RESET           = 4'h0,
@@ -25,13 +61,14 @@ module LCD(Clk, rst, LCD_DATA, LCD_EN, LCD_RW, LCD_RS, DATA_IN);
     LINE2           = 4'h6,
     RETURN_HOME     = 4'h7,
     CG_RAM_HOME     = 4'h8,
-    write_CG        = 4'h9;
+    write_CG        = 4'h9,
+    CUSTOM_OP       = 4'hA;
 
 
     assign LCD_DATA = LCD_RW ? 8'bZZZZZZZZ : DATA_BUS_VALUE;
 
     Custom_font_ROM ROM_U(.addr(font_addr), .out_data(font_data));
-    LCD_display_string u1(.index(CHAR_COUNT), .out(Next_Char), .DATA_IN(DATA_IN), .clk(Clk), .rst(rst));
+    //LCD_display_string u1(.index(CHAR_COUNT), .out(Next_Char), .DATA_IN(DATA_IN), .clk(Clk), .rst(rst));
 
 
     //=============================除頻===============================
@@ -121,6 +158,8 @@ module LCD(Clk, rst, LCD_DATA, LCD_EN, LCD_RW, LCD_RS, DATA_IN);
 
                 // Return write address to first character postion on line 1
                 RETURN_HOME : begin
+                    //LEDR[17] <= 1'd0;
+                    //LEDR[16] <= 1'd1;
                     LCD_EN          <= 1'b1;
                     LCD_RS          <= 1'b0;
                     LCD_RW          <= 1'b0;
@@ -163,6 +202,58 @@ module LCD(Clk, rst, LCD_DATA, LCD_EN, LCD_RW, LCD_RS, DATA_IN);
             endcase
         end
     end
+    // ======================
+    //LCD_display_string u1(.index(CHAR_COUNT), .out(Next_Char), .DATA_IN(DATA_IN), .clk(Clk), .rst(rst));
+    //module LCD_display_string(index, out, DATA_IN, clk, rst);
+
+    reg [7:0] ASCII;
+    reg [7:0] displayreg [31:0];
+    reg [3:0] ID_COUNT;
+    reg [7:0] LCD_L [9:0];
+    reg [7:0] LCD_R [9:0];
+    reg [7:0] LCD_B [15:0];
+    reg [7:0] _;
+    always @(posedge Clk or negedge rst)begin
+        if (!rst)begin
+            `lcdLine1 <= gameStr[gameState];
+            `lcdLine2 <= {"TIME:",
+                {timeNum/8'd10 + 8'h30, timeNum%8'd10 + 8'h30},
+                " POINT:",
+                {point/8'd10 + 8'h30, point%8'd10 + 8'h30}
+            };
+
+            //TIME:30 POINT:00;
+        end else begin
+            `lcdLine1 <= gameStr[gameState];
+            `lcdLine2 <= {"TIME:",
+                {timeNum/8'd10 + 8'h30, timeNum%8'd10 + 8'h30},
+                " POINT:",
+                {point/8'd10 + 8'h30, point%8'd10 + 8'h30}
+            };
+        end
+    end
+
+    always@(*)begin
+        Next_Char <= displayreg[CHAR_COUNT];
+    end
+
+    always@(*)begin
+        case(DATA_IN)/* 0 - 9 */
+            4'h0    : ASCII = 8'h30;
+            4'h1    : ASCII = 8'h31;
+            4'h2    : ASCII = 8'h32;
+            4'h3    : ASCII = 8'h33;
+            4'h4    : ASCII = 8'h34;
+            4'h5    : ASCII = 8'h35;
+            4'h6    : ASCII = 8'h36;
+            4'h7    : ASCII = 8'h37;
+            4'h8    : ASCII = 8'h38;
+            4'h9    : ASCII = 8'h39;
+            default : ASCII = 8'h20;
+        endcase
+    end
+
+
 endmodule
 
 module LCD_display_string(index, out, DATA_IN, clk, rst);
@@ -175,19 +266,24 @@ module LCD_display_string(index, out, DATA_IN, clk, rst);
     reg [7:0] displayreg [31:0];
 
     always@(posedge clk)begin
-        displayreg[0]   <= 8'h4C; //L
-        displayreg[1]   <= 8'h43; //C
-        displayreg[2]   <= 8'h44; //D
-        displayreg[3]   <= 8'h20; //
-        displayreg[4]   <= 8'h44; //D
-        displayreg[5]   <= 8'h61; //a
-        displayreg[6]   <= 8'h74; //t
-        displayreg[7]   <= 8'h61; //a
-        displayreg[8]   <= 8'h20; //
-        displayreg[9]   <= 8'h49; //I
-        displayreg[10]  <= 8'h6E; //n
-        displayreg[11]  <= 8'h3D; //=
-        displayreg[12]  <= ASCII;
+        //`lcdLine1 <= gameStr[gameState];
+        displayreg[0]   <= 8'h47; //g
+        displayreg[1]   <= 8'h53; //r
+        displayreg[2]   <= 8'h4F; //o
+        displayreg[3]   <= 8'h55; //u
+        displayreg[4]   <= 8'h50; //p
+        displayreg[5]   <= 8'h20; //
+        displayreg[6]   <= 8'h20; //
+        displayreg[7]   <= 8'h20; //
+        displayreg[8]   <= 8'h30; //0
+        displayreg[9]   <= 8'h32; //2
+        displayreg[10]  <= 8'h20; //
+        displayreg[11]  <= 8'h20; //
+        displayreg[12]  <= 8'h20; //
+        displayreg[13]  <= 8'h20; //
+        displayreg[14]  <= 8'h20; //
+        //displayreg[15]  <= 8'h20; //
+        displayreg[15]  <= ASCII;
         // Line 2
         displayreg[16]  <= 8'h44; //D
         displayreg[17]  <= 8'h45; //E
@@ -305,3 +401,7 @@ module Custom_font_ROM(addr, out_data);//8個自定義字形
     assign data[62] = 8'b000_00000;
     assign data[63] = 8'b000_00000;//游標位置
 endmodule
+
+
+
+
