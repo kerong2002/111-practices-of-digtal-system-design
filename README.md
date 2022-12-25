@@ -1,8 +1,9 @@
 # 111-practices-of-digtal-system-design
 ## Contributor
 ### DevonEvant
-### kerong2002
+### @kerong2002
 ### qwe04687
+
 
 ## 2022/09/22 
 - 作業一 [16 bits Carry-Save Adder](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20220922/1/CSA.v)
