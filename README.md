@@ -1,8 +1,8 @@
 # 111-practices-of-digtal-system-design
 ## Contributor
-### DevonEvant
-### @kerong2002
-### qwe04687
+#### DevonEvant
+#### kerong2002
+#### qwe04687
 
 
 ## 2022/09/22 
