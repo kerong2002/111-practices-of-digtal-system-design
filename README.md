@@ -41,5 +41,8 @@
 - 作業三 [SRAM with IR Controller+](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221208/3/HW3.v)
  ## 2022/12/15
 - 作業一 [color](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221215/1/hw.v)
-- 作業二 [hw]()
+- 作業二 [hw](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221215/2/hw.v)
 - 作業三 [ball](https://github.com/DevonEvant/111-practices-of-digtal-system-design/blob/main/20221215/3/ball.v)
+## 2022/12/22
+- 作業一 [ball game]()
+- 作業二 [elfish](https://github.com/DevonEvant/111-practices-of-digtal-system-design/tree/main/20221222/2)
