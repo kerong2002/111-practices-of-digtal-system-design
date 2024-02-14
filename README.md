@@ -3,8 +3,11 @@
 ### DevonEvant, kerong2002, qwe04687
 
 ## useful
-- [DIV](https://github.com/kerong2002/111-practices-of-digtal-system-design/blob/main/verilog_main/div.v)
-- [MULTIPLE](https://github.com/kerong2002/111-practices-of-digtal-system-design/blob/main/verilog_main/multiple.v)
+
+|運算|CODE|運算|CODE|
+|:-:|:--:|:-:|:--:|
+|除法|[DIV](https://github.com/kerong2002/111-practices-of-digtal-system-design/blob/main/verilog_main/div.v)|乘法|[MULTIPLE](https://github.com/kerong2002/111-practices-of-digtal-system-design/blob/main/verilog_main/multiple.v)|
+
 - [OFFSET](https://github.com/kerong2002/111-practices-of-digtal-system-design/blob/main/verilog_main/offset.v)
 
 ## 2022/09/22 
